@@ -106,7 +106,6 @@ volumes:
   n8n_data:
   prometheus_data:
 
-
 networks:
   n8n_network:
     driver: bridge
