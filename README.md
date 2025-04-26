@@ -9,17 +9,15 @@ docker-compose up -d --scale n8n=3
 2. Stop and start a service
 
 ```
-docker stop n8n_node_1
-docker start n8n_node_1
-docker stop n8n-nginx
-docker stop n8n-postgres
+docker stop n8n-postgresql-high-availability-system-n8n-1
+docker start n8n-postgresql-high-availability-system-n8n-1
 ```
 
 3. Check out logs
 
 ```
-docker logs n8n_node_1
-docker logs n8n_node_2
+docker logs n8n-postgresql-high-availability-system-n8n-1
+docker logs n8n-postgresql-high-availability-system-n8n-2
 ```
 
 4. List all running containers
@@ -49,10 +47,10 @@ docker-compose down -v
 8. Restore from backup file
 
 ```
-./restore_volumes.sh ./docker_backups/<timestamp>
+./restore_volumes.sh ./docker_backups/20250426_111308
 ```
 
-9. Run the Docker compose with 3 n8n nodes
+9. Re-run the Docker compose with 3 n8n nodes
 
 ```
 docker-compose up -d --scale n8n=3
