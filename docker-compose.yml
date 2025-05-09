@@ -12,17 +12,6 @@ services:
     networks:
       - n8n_network
 
-  postgres_exporter:
-    image: wrouesnel/postgres_exporter
-    container_name: postgres-exporter
-    restart: unless-stopped
-    environment:
-      - DATA_SOURCE_NAME=postgresql://n8n_user:n8n_pass@postgres:5432/n8n_db?sslmode=disable
-    ports:
-      - "9187:9187"
-    networks:
-      - n8n_network
-
   n8n:
     image: n8nio/n8n:latest
     restart: unless-stopped
@@ -41,10 +30,10 @@ services:
       - N8N_METRICS=true
       - N8N_METRICS_ACTIVE=true
       - N8N_METRICS_ENDPOINT=/metrics
-      - WEBHOOK_URL=http://localhost/webhook
       - N8N_QUEUE_MODE=redis
       - N8N_REDIS_HOST=redis
       - N8N_REDIS_PORT=6379
+      - WEBHOOK_URL=http://localhost/webhook
     depends_on:
       - postgres
     networks:
@@ -55,13 +44,6 @@ services:
       - 5678
     volumes:
       - n8n_data:/home/node/.n8n
-
-  redis:
-    image: redis:alpine
-    container_name: n8n-redis
-    restart: unless-stopped
-    networks:
-      - n8n_network
 
   nginx:
     image: nginx:latest
@@ -75,14 +57,10 @@ services:
     networks:
       - n8n_network
 
-  nginx_exporter:
-    image: nginx/nginx-prometheus-exporter
-    container_name: nginx-exporter
+  redis:
+    image: redis:alpine
+    container_name: n8n-redis
     restart: unless-stopped
-    command:
-    - "-nginx.scrape-uri=http://n8n-nginx/status"
-    ports:
-      - "9113:9113"
     networks:
       - n8n_network
 
@@ -104,6 +82,8 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
+    volumes:
+    - grafana_data:/var/lib/grafana
     environment:
       GF_SECURITY_ADMIN_PASSWORD: admin # Username: admin; Password: admin
     depends_on:
@@ -111,10 +91,56 @@ services:
     networks:
       - n8n_network
 
+# Exporters
+  postgres_exporter:
+    image: wrouesnel/postgres_exporter
+    container_name: postgres-exporter
+    restart: unless-stopped
+    environment:
+      - DATA_SOURCE_NAME=postgresql://n8n_user:n8n_pass@postgres:5432/n8n_db?sslmode=disable
+    ports:
+      - "9187:9187"
+    networks:
+      - n8n_network
+
+  redis-exporter:
+    image: oliver006/redis_exporter:latest
+    container_name: redis-exporter
+    restart: unless-stopped
+    environment:
+      - REDIS_ADDR=redis://n8n-redis:6379
+    ports:
+      - "9121:9121"
+    networks:
+      - n8n_network
+    depends_on:
+      - redis
+
+  nginx_exporter:
+    image: nginx/nginx-prometheus-exporter
+    container_name: nginx-exporter
+    restart: unless-stopped
+    command:
+    - "-nginx.scrape-uri=http://n8n-nginx/status"
+    ports:
+      - "9113:9113"
+    networks:
+      - n8n_network
+
+  node_exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    ports:
+      - "9100:9100"
+    networks:
+      - n8n_network
+
 volumes:
   postgres_data:
   n8n_data:
   prometheus_data:
+  grafana_data:
 
 networks:
   n8n_network:
