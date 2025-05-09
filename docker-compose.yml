@@ -42,6 +42,9 @@ services:
       - N8N_METRICS_ACTIVE=true
       - N8N_METRICS_ENDPOINT=/metrics
       - WEBHOOK_URL=http://localhost/webhook
+      - N8N_QUEUE_MODE=redis
+      - N8N_REDIS_HOST=redis
+      - N8N_REDIS_PORT=6379
     depends_on:
       - postgres
     networks:
@@ -52,6 +55,13 @@ services:
       - 5678
     volumes:
       - n8n_data:/home/node/.n8n
+
+  redis:
+    image: redis:alpine
+    container_name: n8n-redis
+    restart: unless-stopped
+    networks:
+      - n8n_network
 
   nginx:
     image: nginx:latest
@@ -70,7 +80,7 @@ services:
     container_name: nginx-exporter
     restart: unless-stopped
     command:
-    - "-nginx.scrape-uri=http://n8n-nginx:8080/status"
+    - "-nginx.scrape-uri=http://n8n-nginx/status"
     ports:
       - "9113:9113"
     networks:
@@ -95,7 +105,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      GF_SECURITY_ADMIN_PASSWORD: admin # default password
+      GF_SECURITY_ADMIN_PASSWORD: admin # Username: admin; Password: admin
     depends_on:
       - prometheus
     networks:
