@@ -7,7 +7,7 @@ mkdir -p "$backup_dir"
 
 echo "Backing up Docker volumes..."
 
-for volume in n8n-postgresql-high-availability-system_n8n_data n8n-postgresql-high-availability-system_postgres_data n8n-postgresql-high-availability-system_prometheus_data; do
+for volume in n8n-postgresql-high-availability-system_n8n_data n8n-postgresql-high-availability-system_postgres_data n8n-postgresql-high-availability-system_prometheus_data n8n-postgresql-high-availability-system_grafana_data; do
   echo "Backing up $volume..."
   docker run --rm \
     -v ${volume}:/volume \

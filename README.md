@@ -47,7 +47,7 @@ docker-compose down -v
 8. Restore from backup file
 
 ```
-./restore_volumes.sh ./docker_backups/20250426_111308
+./restore_volumes.sh ./docker_backups/<timestamp>
 ```
 
 9. Re-run the Docker compose with 3 n8n nodes

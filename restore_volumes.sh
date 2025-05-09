@@ -10,7 +10,7 @@ fi
 echo "Make sure all services are stopped before restoring!"
 read -p "Press Enter to continue..."
 
-for volume in n8n-postgresql-high-availability-system_n8n_data n8n-postgresql-high-availability-system_postgres_data n8n-postgresql-high-availability-system_prometheus_data; do
+for volume in n8n-postgresql-high-availability-system_n8n_data n8n-postgresql-high-availability-system_postgres_data n8n-postgresql-high-availability-system_prometheus_data n8n-postgresql-high-availability-system_grafana_data; do
   echo "Restoring $volume..."
   docker volume create $volume || true
   docker run --rm \
