@@ -5,7 +5,10 @@ scrape_configs:
   - job_name: 'n8n'
     metrics_path: /metrics
     static_configs:
-      - targets: ['n8n:5678']
+      - targets:
+        - n8n-postgresql-high-availability-system-n8n-1:5678
+        - n8n-postgresql-high-availability-system-n8n-2:5678
+        - n8n-postgresql-high-availability-system-n8n-3:5678
 
   - job_name: 'nginx'
     static_configs:
