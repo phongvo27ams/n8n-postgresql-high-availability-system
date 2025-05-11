@@ -19,25 +19,31 @@ docker stop n8n-postgresql-high-availability-system-n8n-1
 docker start n8n-postgresql-high-availability-system-n8n-1
 ```
 
-4. Take a Backup
+4. Check the logs
+
+```
+docker logs n8n-postgresql-high-availability-system-n8n-1
+```
+
+5. Take a Backup
 
 ```
 ./backup_volumes.sh
 ```
 
-5. Simulate failure
+6. Simulate failure
 
 ```
 docker-compose down -v
 ```
 
-6. Restore from backup file
+7. Restore from backup file
 
 ```
 ./restore_volumes.sh ./docker_backups/<timestamp>
 ```
 
-7. Re-run the Docker compose with 3 n8n nodes
+8. Re-run the Docker compose with 3 n8n nodes
 
 ```
 docker-compose up -d --scale n8n=3

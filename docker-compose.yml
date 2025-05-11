@@ -30,9 +30,11 @@ services:
       - N8N_METRICS=true
       - N8N_METRICS_ACTIVE=true
       - N8N_METRICS_ENDPOINT=/metrics
+      - N8N_RUNNERS_ENABLED=true
       - N8N_QUEUE_MODE=redis
       - N8N_REDIS_HOST=redis
       - N8N_REDIS_PORT=6379
+      - N8N_TUNNEL_URL=http://localhost
       - WEBHOOK_URL=http://localhost/webhook
     depends_on:
       - postgres
