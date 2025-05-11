@@ -35,7 +35,7 @@ services:
       - N8N_REDIS_HOST=redis
       - N8N_REDIS_PORT=6379
       - N8N_TUNNEL_URL=http://localhost
-      - WEBHOOK_URL=http://localhost/webhook
+      - WEBHOOK_URL=http://localhost
     depends_on:
       - postgres
     networks:
